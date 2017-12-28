@@ -73,7 +73,7 @@ These are needed for building OpenSSL and/or PHP from source
 
 You'll also need a recent version of OpenSSL. I've had luck on the 1.0.2 version and so grab the latest (`m` worked as of this writing, although current below is `n`).
 
-- [OpenSSL Source](﻿https://www.openssl.org/source/openssl-1.0.2n.tar.gz)
+- [OpenSSL Source](﻿https://www.openssl.org/source)
 
 PHP source, I'll typically copy over the php version downloaded by the pdo_sqlcipher build step above and unpack to the `C:\ ` directory.
 
