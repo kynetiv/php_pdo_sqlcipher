@@ -128,7 +128,7 @@ SET BISON_PKGDATADIR="C:\Program Files\GnuWin32\share\bison"
 
 *Note* May need to use this link to program files (issue with space)
 ```sh 
-SET PATH=%PATH%;C:\openssl\bin;%ProgramFiles\GnuWin32\bin;
+SET PATH=%PATH%;C:\openssl\bin;%ProgramFiles%\GnuWin32\bin;
 ```
 
 #### PHP Extension Build
