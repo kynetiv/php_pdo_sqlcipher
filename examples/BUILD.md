@@ -33,6 +33,7 @@ Now we'll use my fork of [pdo_sqlcipher](https://github.com/abbat/pdo_sqlcipher)
 cd /opt
 git clone https://github.com/kynetiv/pdo_sqlcipher
 cd pdo_sqlcipher
+git checkout windows-build
 chmod +x build.sh
 ./build.sh
 ```
