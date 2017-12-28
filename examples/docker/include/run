@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+
+echo "ServerName localhost" >> /etc/httpd/conf/httpd.conf
+sed -ri 's#^DocumentRoot "/var/www/html"#DocumentRoot "/project"#' /etc/httpd/conf/httpd.conf
+sed -ri 's#^<Directory "/var/www">#<Directory "/project">#' /etc/httpd/conf/httpd.conf
+sed -ri 's#^<Directory "/var/www/html">#<Directory "/project">#' /etc/httpd/conf/httpd.conf
+
+
+exec /usr/sbin/httpd -DFOREGROUND

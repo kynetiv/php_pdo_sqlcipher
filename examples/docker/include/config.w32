@@ -1,0 +1,11 @@
+﻿// $Id$
+// vim:ft=javascript
+ARG_ENABLE("pdo_sqlcipher", "Enable PHP Data Objects support", "no");
+
+if (PHP_PDO_SQLCIPHER != "no") {
+	EXTENSION('pdo_sqlcipher', 'pdo_sqlcipher.c sqlcipher_driver.c sqlcipher_statement.c sqlcipher3.c crypto.c crypto_cc.c crypto_impl.c crypto_libtomcrypt.c crypto_openssl.c', true);
+	ADD_EXTENSION_DEP('pdo_sqlcipher', 'pdo');
+	PHP_INSTALL_HEADERS("ext/pdo", "php_pdo.h php_pdo_driver.h");
+	PHP_INSTALL_HEADERS("ext/pdo_sqlcipher", "crypto.h sqlcipher3.h");
+	ADD_FLAG("LIBS", "gdi32.lib libeay32.lib ssleay32.lib");
+}

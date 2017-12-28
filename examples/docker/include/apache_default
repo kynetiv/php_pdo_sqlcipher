@@ -1,0 +1,15 @@
+<VirtualHost *:80>
+    #ServerName localhost
+
+    ServerAdmin webmaster@localhost
+    DocumentRoot /project
+
+    <Directory /project>
+        AllowOverride All
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+    ErrorLog /dev/stdout
+    CustomLog /dev/stdout combined
+</VirtualHost>
