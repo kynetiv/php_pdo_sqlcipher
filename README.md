@@ -1,8 +1,8 @@
-#### Sqlcipher Extension for Windows PHP (DLL)
+### SQLCipher PDO (PHP Data Objects) Extension for Windows PHP (DLL)
 
 *Disclaimer*: The built DLL's may be old and have vulnerabilities. Use at your own risk.
 
-This repo provides a built version of [sqlcipher](https://github.com/sqlcipher/sqlcipher) as a Windows PHP module (DLL).
+This repo provides a built version of a PHP PDO interface for [sqlcipher](https://github.com/sqlcipher/sqlcipher) as a Windows PHP extension (DLL).
 
 Currently there are compiled versions for:
  - [PHP 7.1](dist/php71) (built from PHP 7.1.11)
