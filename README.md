@@ -7,7 +7,7 @@ This repo provides a built version of a PHP PDO interface for [sqlcipher](https:
 Currently there are compiled versions for:
  - [PHP 7.1](dist/php71) (built from PHP 7.1.11)
  - [PHP 7.0](dist/php70) (built from PHP 7.0.25)
- - [PHP 5.6](dist/php56) (built from PHP 5.6.15)
+ - [PHP 5.6](dist/php56) (built from PHP 5.6.37)
  
 For Building the extension yourself, see build [instruction](examples/BUILD.md).
 

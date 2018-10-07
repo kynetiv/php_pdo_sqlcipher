@@ -1,5 +1,6 @@
 ﻿// $Id$
 // vim:ft=javascript
+
 ARG_ENABLE("pdo_sqlcipher", "Enable PHP Data Objects support", "no");
 
 if (PHP_PDO_SQLCIPHER != "no") {

@@ -1,6 +1,6 @@
 ### Building the php_pdo_sqlcipher.dll extension 
 
-The following steps to build the extension are somewhat problematic and error-proned due to multiple projects and environmental issues. Not to mention I'm not a Windows dev but somehow managed to get this built ;-) I'll try to layout what worked for _me_, although, YMMV.
+The following steps to build the extension are somewhat problematic and error-prone due to multiple projects and environmental issues. Not to mention I'm not a Windows dev but somehow managed to get this built ;-) I'll try to layout what worked for _me_, although, YMMV.
 
 
 1. A linux box to build the PHP extension from source with update namespaces (`sqlite` to `sqlcipher`);
@@ -37,11 +37,19 @@ git checkout windows-build
 chmod +x build.sh
 ./build.sh
 ```
-If the environment and the version of PHP available (may need to add new versions to config.m4), it should build a release folder with the applicable files for _Linux_. Although we're mostly interested in the following output files/folders:
+If the environment and the version of PHP available (may need to add new versions to config.m4), it should build a `release` folder with the applicable files for _Linux_. Although we're mostly interested in the following output files/folders:
 
 - php source (tar file, eg php-7.1.11.tar.gz)
 - 'build' directory
 - config.w32 (needed for building the Windows PHP extension later)
+
+Copy these files and directories from docker somewhere where you can find them in your Windows machine
+
+```bash 
+docker cp sqlcipher:/opt/pdo_sqlcipher/php-7.1.11.tar.gz .
+docker cp sqlcipher:/opt/pdo_sqlcipher/build/ .
+docker cp sqlcipher:/opt/pdo_sqlcipher/config.w32 .
+```
 
 #### Windows Steps
 
@@ -57,11 +65,20 @@ You may need to download a newer version of .net framework as well. I used 4.6 a
 
 Currently for PHP7, according to the [PHP Windows docs](https://wiki.php.net/internals/windows/stepbystepbuild), you'll need the Visual C++ 14.0 (Visual Studio 2015). I beleive a full build of VS2015 will have the build tools but the below link is _just_ the bare necessity of build tools and the Command Prompt
 
-- [Download Visual C++ Build Tools 2015](http://landinghub.visualstudio.com/visual-cpp-build-tools)
+- [Download Visual C++ Build Tools 2015](http://download.microsoft.com/download/5/F/7/5F7ACAEB-8363-451F-9425-68A90F98B238/visualcppbuildtools_full.exe) - found here https://visualstudio.microsoft.com/vs/older-downloads/, (Redistributables and Build Tools)
 
-If you don't have one, get a zip utility for some of these gzip'd source. I just used 7-zip but other would be fine.
+For PHP5.6, you can try looking around microsoft.com, but here is a currently working link to the Visual 2012 Express for Windows Desktop
+
+- [Download Visual Studio 2012 Express for Windows Desktop](http://download.microsoft.com/download/1/F/5/1F519CC5-0B90-4EA3-8159-33BFB97EF4D9/VS2012_WDX_ENU.iso)
+ 
+
+If you don't have one, get a zip utility for some of these gzip'd source. I just used 7-zip (free) but other would be fine.
  
 - [Download 7-Zip](http://www.7-zip.org/)
+
+Also, a rar and iso tool (VS2012 iso), like WinRar (free). 
+
+- [Downlaod WinRar](﻿https://www.win-rar.com/)
 
 Perl, NASM, Bison.
 These are needed for building OpenSSL and/or PHP from source
@@ -74,7 +91,7 @@ These are needed for building OpenSSL and/or PHP from source
 
 You'll also need a recent version of OpenSSL. I've had luck on the 1.0.2 version and so grab the latest (`m` worked as of this writing, although current below is `n`).
 
-- [OpenSSL Source](﻿https://www.openssl.org/source)
+- ﻿https://www.openssl.org/source/
 
 PHP source, I'll typically copy over the php version downloaded by the pdo_sqlcipher build step above and unpack to the `C:\ ` directory.
 
@@ -90,7 +107,7 @@ Because this is essentially a throw-away VM, I put everything i need in the `C:\
 
 I have followed [this guide](http://developer.covenanteyes.com/building-openssl-for-visual-studio/) before, but the following is specific for this VM:
 
-Open up the Windows Start Menu and find the x86 only prompt, so:
+Open up the Windows Start Menu and find the "Native" x86 only prompt, so:
  
  Visual C++ Build Tools -> Windows Desktop Command Prompts -> Visual C++ 2015 x86 Native Build Tools Command Prompt
  *NOTE* run as administrator
@@ -121,24 +138,22 @@ This is an error prone step so following the described environment will be helpf
 Now that OpenSSL is build, we'll update our paths for the PHP build. Adding in some additional paths for Bison
 
 ```sh 
-SET PATH=%PATH%;C:\openssl\bin;"C:\Program Files\GnuWin32\bin"
+SET PATH=%PATH%;C:\openssl\bin;%ProgramFiles%\GnuWin32\bin;
 SET LIB=%LIB%;C:\openssl\lib;
 SET INCLUDE=%INCLUDE%;C:\openssl\include
-SET BISON_PKGDATADIR="C:\Program Files\GnuWin32\share\bison"
+SET BISON_PKGDATADIR="%ProgramFiles%\GnuWin32\bin\bison"
 ```
 
-*Note* May need to use this link to program files (issue with space)
-```sh 
-SET PATH=%PATH%;C:\openssl\bin;%ProgramFiles%\GnuWin32\bin;
-```
+*Note* May have issues with the "Program Files" `space`, so use the %aliases% above.
+
 
 #### PHP Extension Build
 
-Now place the `build` directory from pdo_sqlcipher directory (linux) earlier into the php-src\ext folder renaming it to `pdo_sqlcipher`. This should be alongside other core modules such as `pdo_sqlite`
+Now place the `build` directory from pdo_sqlcipher directory (linux) earlier into the `php-src\ext` folder renaming it to `pdo_sqlcipher`. This should be alongside other core modules such as `pdo_sqlite`
 
 Also add the `config.w32` from the pdo_sqlcipher directory (linux) into the root of the new `pdo_sqlcipher` extensions directory
 
-On Windows, the PHP build steps use different files. We'll need to modify only a couple of these:
+On Windows, the PHP build steps use different files. We'll need to modify only a couple of these files in our extension folder:
 
 ##### php_pdo_sqlcipher_int.h
 
@@ -204,22 +219,29 @@ Enabled extensions:
 --------------------------
 ```
 
+If you get some error from the JSRuntime, open the configure.js file that was generated and inspect the line. I once got a cryptic error
+about some invisible unicode (‹¯¨) at the first (1) position need to be deleted, just to the left:
+
+```bash
+// $Id$
+```
+
 Last step! make it.
 
 ```sh 
 nmake php_pdo_sqlcipher.dll
 ```
 
-This will take a moment to build and should end with:
+You'll see plenty of warnings and this will take a moment to build. It should end with:
  
 ```sh 
 EXT pdo_sqlcipher build complete
 ```
 
-You should find the resulting php_pdo_sqlcipher file located in:
+You should find the resulting `php_pdo_sqlcipher.dll` file located in:
 
 C:\php-src\Release\php_pdo_sqlcipher.dll
 
-Celebrate!
+Celebrate! :tada:
 
-Otherwise review your errors and `nmake clean` and repeat. Good Luck! :)
+Otherwise... review your errors and `nmake clean` and repeat. Good Luck! :)

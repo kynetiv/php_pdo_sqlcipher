@@ -1,12 +1,12 @@
 
 #### General Usage Example
-In general you can use much like `pdo_sqlite` extension. Following [abbat/pdo_sqlcipher](https://github.com/abbat/pdo_sqlcipher/blob/master/README.en.md) approach, the extensions in this repo have copied the core pdo_sqlite and update their namespace from `sqlite` to `sqlcipher`.
+In general you can use much like `pdo_sqlite` extension.  Only difference is that we've modified the namespace from `sqlite` to `sqlcipher`.
 
-A typical connection to the pdo_sqlcipher extension may look something like:
+So a typical connection to the pdo_sqlcipher extension may look something like:
 
 ```php
 $key = 'my-sqlite-key';
-$sql = 'SELECT * from mytable';
+$sql = 'SELECT * FROM mytable';
 
 $dbh = new PDO('sqlcipher:db.sqlite', null, null, null)﻿or die("cannot open the database");;
 
@@ -24,7 +24,7 @@ if($ret)
 else
 {
   echo 'Error: ';
-  print_r($this_connection->errorInfo());
+  print_r($dbh->errorInfo());
 }
 
 ```
