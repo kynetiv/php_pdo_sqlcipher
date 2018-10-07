@@ -2,14 +2,14 @@
 
 *Disclaimer*: The built DLL's may be old and have vulnerabilities. Use at your own risk.
 
-This repo provides a built version of a PHP PDO interface for [sqlcipher](https://github.com/sqlcipher/sqlcipher) as a Windows PHP extension (DLL).
+This repo provides built versions of a PHP PDO interface for [sqlcipher](https://github.com/sqlcipher/sqlcipher) as a Windows PHP extension (DLL).
 
 Currently there are compiled versions for:
  - [PHP 7.1](dist/php71) (built from PHP 7.1.11)
  - [PHP 7.0](dist/php70) (built from PHP 7.0.25)
  - [PHP 5.6](dist/php56) (built from PHP 5.6.38)
  
-For Building the extension yourself, see build [instruction](examples/BUILD.md).
+For Building the extension yourself, see the [build instructions](examples/BUILD.md).
 
 This project has not fully utilized all of the tools built into sqlite or sqlcipher, and as such, all APIs have not been tested to work (or not work).
 

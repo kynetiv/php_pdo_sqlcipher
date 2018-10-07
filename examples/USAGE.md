@@ -1,8 +1,8 @@
 
-#### General Usage Example
-In general you can use much like `pdo_sqlite` extension.  Only difference is that we've modified the namespace from `sqlite` to `sqlcipher`.
+#### General Usage Example for pdo_sqlcipher
+In general you can use this extension much like `pdo_sqlite` extension.  Only difference is that we've modified the namespace from `sqlite` to `sqlcipher`.
 
-So a typical connection to the pdo_sqlcipher extension may look something like:
+So a typical connection to the `pdo_sqlcipher` extension may look something like:
 
 ```php
 $key = 'my-sqlite-key';

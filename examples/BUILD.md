@@ -2,16 +2,15 @@
 
 The following steps to build the extension are somewhat problematic and error-prone due to multiple projects and environmental issues. Not to mention I'm not a Windows dev but somehow managed to get this built ;-) I'll try to layout what worked for _me_, although, YMMV.
 
-
-1. A linux box to build the PHP extension from source with update namespaces (`sqlite` to `sqlcipher`);
+1. A linux box to build the PHP extension from source with updated namespaces (`sqlite` to `sqlcipher`);
 2. A Windows box with the necessary build tools (more on that in a bit) to build OpenSSl from source and PHP from source.
 3. Extra patience
 
-If you know your way around a Windows box, its possible you don't need to follow my steps in `1.`, although it was easier this way for me.
+If you know your way around a Windows box, its possible you don't need to follow my steps building extension steps in Linux below, although it was easier this way for me.
 
 #### Build the extension on Linux:
 
-I used the provided Dockerfile to create a linux environment for the build and the targeted PHP version (currently PHP 7.1). you may use something else just as well. After built, I'll ssh into the running container to do some manual commands.
+I used the provided Dockerfile to create a linux environment for the build and the targeted PHP version (currently PHP 7.1). you may use something else just as well. You can also update the dockerfile to choose which PHP version to install.
 
 ```sh
 docker build -f docker/Dockerfile -t myuser/php71-sqlcipher .
@@ -21,7 +20,6 @@ Once built I'll run it and then ssh in.
 (TODO: Automate the following into the dockerfile)
 
 ```sh 
-Run and enter the container
 docker run --name=sqlcipher -p="8001:80" -d myuser/php71-sqlcipher
 docker exec -it sqlcipher bash
 ```
@@ -40,8 +38,8 @@ chmod +x build.sh
 If the environment and the version of PHP available (may need to add new versions to config.m4), it should build a `release` folder with the applicable files for _Linux_. Although we're mostly interested in the following output files/folders:
 
 - php source (tar file, eg php-7.1.11.tar.gz)
-- 'build' directory
-- config.w32 (needed for building the Windows PHP extension later)
+- 'build' directory - this is our renamed pdo_sqlcipher extension
+- config.w32 (needed for building the Windows PHP extension later, also provided in this repo in the docker folder)
 
 Copy these files and directories from docker somewhere where you can find them in your Windows machine
 
@@ -78,7 +76,7 @@ If you don't have one, get a zip utility for some of these gzip'd source. I just
 
 Also, a rar and iso tool (VS2012 iso), like WinRar (free). 
 
-- [Downlaod WinRar](﻿https://www.win-rar.com/)
+- https://www.win-rar.com/
 
 Perl, NASM, Bison.
 These are needed for building OpenSSL and/or PHP from source
@@ -202,7 +200,7 @@ configure --disable-all --enable-pdo --enable-pdo_sqlcipher --disable-zts --enab
 
 *Note: thread safety has not been tested, only non-thread-safe. `--enable-cli` is to bypass some issues, not really needed other than to get the build to run.
 
-The above command should show some table output and take notice that you see pdo_sqlcipher listed as `shared`, meaning to be build as a dll.
+The above command should show some table output and take notice that you see `pdo_sqlcipher` listed as `shared`, meaning to be built as a dll.
 
 ```sh
 Enabled extensions:
@@ -219,14 +217,22 @@ Enabled extensions:
 --------------------------
 ```
 
-If you get some error from the JSRuntime, open the configure.js file that was generated and inspect the line. I once got a cryptic error
-about some invisible unicode (‹¯¨) at the first (1) position need to be deleted, just to the left:
+If you get some error from the JSRuntime, open the `configure.js` (file that buildconf generated) and inspect the line. 
+I once got a cryptic error:
+
+```bash
+﻿C:\php-src\configure.js(5475, 1) Microsoft JScript runtime error: '‹¯¨' is undefined
+```
+about some invisible bom (‹¯¨) at the first (1) position need to be deleted, so just needed backspace to the left of:
 
 ```bash
 // $Id$
 ```
 
-Last step! make it.
+Side note, really JavaScript builds php on windows?!?! ... moving on....
+
+### Build it already
+OK, last step!
 
 ```sh 
 nmake php_pdo_sqlcipher.dll
