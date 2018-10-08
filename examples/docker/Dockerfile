@@ -1,24 +1,6 @@
 FROM centos:centos7
 
-RUN rpm -Uvh http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
-    rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
-
-# Install desired PHP version (remi-php) #
-RUN yum update -y && \
-  yum install --enablerepo="remi,remi-php56" -y \
-  php \
-  php-devel \
-  php-cli \
-  php-pdo \
-  php-gd \
-  php-mbstring \
-  php-xml && \
-  yum clean all && \
-  rm -rf /var/cache/yum/* && \
-  rm -rf /tmp/* && \
-  rm -rf /var/tmp/*
-
-# other build dependencies
+# build dependencies
 RUN yum update -y && \
   yum install -y \
   libicu-devel \
@@ -43,6 +25,25 @@ RUN yum update -y && \
   echo "set hlsearch" >> /root/.vimrc && \
   echo "export TERM=xterm" >> /root/.bashrc && \
   echo "export EDITOR=vim" >> /root/.bashrc && \
+  yum clean all && \
+  rm -rf /var/cache/yum/* && \
+  rm -rf /tmp/* && \
+  rm -rf /var/tmp/*
+
+# php repo with latest versions
+RUN rpm -Uvh http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
+    rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+
+# Install desired PHP version (remi-php) #
+RUN yum update -y && \
+  yum install --enablerepo="remi,remi-php71" -y \
+  php \
+  php-devel \
+  php-cli \
+  php-pdo \
+  php-gd \
+  php-mbstring \
+  php-xml && \
   yum clean all && \
   rm -rf /var/cache/yum/* && \
   rm -rf /tmp/* && \

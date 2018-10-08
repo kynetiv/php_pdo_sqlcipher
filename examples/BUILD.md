@@ -87,7 +87,14 @@ These are needed for building OpenSSL and/or PHP from source
 
 *Note* May need to copy some of these utility folders to the root `C:\ ` directory in addition to Program Files if issues with environment variables occur. (TODO how to setup paths inside Program Files).
 
-You'll also need a recent version of OpenSSL. I've had luck on the 1.0.2 version and so grab the latest (`m` worked as of this writing, although current below is `n`).
+You'll also need a recent version of OpenSSL. I've had luck on the 1.0.2 version and so grab the latest. 
+OpenSSL Version updates may cause issues building from version to version. If building your own is having issue, or you don't mind using php.net's pre-built version, you can find a build version in here:
+
+- https://windows.php.net/downloadS/php-sdk/deps/vc11/x86/
+
+Filename like: openssl-1.0.2p-vc11-x86.zip
+
+Otherwise download the source yourself:
 
 - ﻿https://www.openssl.org/source/
 
@@ -103,7 +110,9 @@ Because this is essentially a throw-away VM, I put everything i need in the `C:\
 
 #### Build OpenSSL
 
-I have followed [this guide](http://developer.covenanteyes.com/building-openssl-for-visual-studio/) before, but the following is specific for this VM:
+If you do want to build from source follow these steps. Otherwise, download the prebuilt version from windows.php.net (link above).
+
+I originally followed [this guide](http://developer.covenanteyes.com/building-openssl-for-visual-studio/) before, but the following is specific for this VM:
 
 Open up the Windows Start Menu and find the "Native" x86 only prompt, so:
  
@@ -133,7 +142,7 @@ This is an error prone step so following the described environment will be helpf
 
 ##### More Environment Variables
 
-Now that OpenSSL is build, we'll update our paths for the PHP build. Adding in some additional paths for Bison
+Now that OpenSSL is built (or you downloaded it and extracted it to `C:\openssl`), we'll update our paths for the PHP build. Adding in some additional paths for Bison
 
 ```sh 
 SET PATH=%PATH%;C:\openssl\bin;%ProgramFiles%\GnuWin32\bin;
